@@ -8,6 +8,7 @@ if ($db->connect_errno) {
 $routes = [
     '/' => 'home',
     '/upload' => 'uploadImage',
+    '/getMovies' => 'getMovies',
     '/addComment' => 'addComment',
     '/getComments' => 'getComments'
 ];
@@ -45,6 +46,20 @@ function uploadImage()
     }
 }
 
+function getMovies()
+{
+    global $db;
+    $sql = "SELECT * FROM image";
+    $result = $db->query($sql);
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        header('Content-Type:application/json');
+        echo json_encode($data);
+    } else {
+        echo "no data found";
+    }
+}
+
 function addComment()
 {
     global $db;
@@ -74,7 +89,6 @@ function getComments()
     global $db;
     $sql = "SELECT * FROM comments";
     $result = $db->query($sql);
-    $comments = array();
     if ($result->num_rows > 0) {
         $data = $result->fetch_all(MYSQLI_ASSOC);
         header('Content-Type:application/json');
